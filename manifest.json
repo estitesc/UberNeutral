@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "UberNeutral",
-  "description": "Analyzes your rideshare profile to show statistics on your rides!",
+  "description": "Offset carbon emissions for every Uber ride you've taken.",
   "version": "1.7.2",
   "permissions": [
     "*://uber.com/*",
@@ -32,13 +32,13 @@
     }
   ],
   "icons": {
-    "64": "images/icon64.png",
-    "32": "images/icon32.png",
-    "38": "images/icon.png",
-    "128": "images/icon128.png"
+    "64": "images/64.png",
+    "32": "images/32.png",
+    "38": "images/38.png",
+    "128": "images/128.png"
   },
   "browser_action": {
-    "default_icon": "images/icon.png"
+    "default_icon": "images/38.png"
   },
   "homepage_url": "https://jonlu.ca",
   "web_accessible_resources": [
