@@ -1,0 +1,94 @@
+@font-face {
+  font-family: "Regular";
+  src: url('chrome-extension://__MSG_@@extension_id__/fonts/thin-uber-font.woff2') format("woff2");
+};
+
+@font-face {
+  font-family: "Medium";
+  src: url('chrome-extension://__MSG_@@extension_id__/fonts/thick-uber-font.woff2') format("woff2");
+};
+
+html {
+  display: grid;
+  min-height: 100%;
+}
+
+body {
+  display: grid;
+  overflow: hidden;
+  text-align: left;
+  background-color: #000;
+  font-family: Regular, serif;
+}
+
+#container {
+  margin: auto;
+  width: 60%;
+  display: flex;
+  height: 60%;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 3em;
+  font-weight: 100;
+  padding-top: 5px;
+  color: #FCFCFC;
+  padding-bottom: 5px;
+}
+
+.alert {
+  font-weight: 900;
+  font-size: 3.0em;
+}
+
+p {
+  margin-top: -5px;
+  font-size: 1.5em;
+  font-weight: 100;
+  color: #fff;
+}
+
+button {
+  cursor: pointer;
+}
+
+#success-box {
+  width: 400px;
+  height: 400px;
+  perspective: 40px;
+}
+
+.right {
+  left: 68%;
+}
+
+.message {
+  position: absolute;
+  width: 100%;
+  text-align: left;
+  height: 40%;
+  top: 47%;
+}
+
+.button-box {
+  position: absolute;
+  width: 50%;
+  height: 15%;
+  top: 88%;
+  left: 0px;
+  background-color: white;
+  color: black;
+  padding: 10px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 22px;
+  margin-right: 20px;
+}
+
+.button-box:hover {
+  background: #efefef;
+  transform: scale(1.05);
+  transition: all .3s ease-in-out;
+}

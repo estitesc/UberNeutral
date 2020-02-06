@@ -64,6 +64,10 @@ a {
   margin-right: 20px;
 }
 
+.button-link:hover {
+  transform: scale(1.05);
+  transition: all .3s ease-in-out;
+}
 
 .alt-link {
   background-color: #000;
