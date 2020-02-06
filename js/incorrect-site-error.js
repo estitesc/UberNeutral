@@ -4,14 +4,11 @@ var choice = async () => {
     input: 'radio',
     showCancelButton: true,
     inputOptions: {
-      eats: "UberEats",
       rides: "Uber Rides"
     }
   });
   if (value) {
-    if (value === 'eats') {
-      window.open("https://www.ubereats.com/en-US/orders/", "_blank");
-    } else if (value === "rides") {
+    if (value === "rides") {
       window.open("https://riders.uber.com/trips", "_blank");
     }
   }

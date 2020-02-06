@@ -7,7 +7,6 @@ $(_ => {
     global.trips = new Map(response.data.trips);
     global.drivers = new Map(response.data.drivers);
     startStatistics();
-    registerClickHandlers();
   });
 });
 
@@ -19,16 +18,16 @@ function startStatistics() {
 
   calculateMoneySpent();
   calculateTripTypesStat();
-  calculateTripCompletionStats();
-  calculateTripLengthsStat();
-  calculateDriverStats();
-  calculateCityStats();
-  calculatePickupAndDropoffStats();
-  calculateMonthAndYearStats();
+  // calculateTripCompletionStats();
+  // calculateTripLengthsStat();
+  // calculateDriverStats();
+  // calculateCityStats();
+  // calculatePickupAndDropoffStats();
+  // calculateMonthAndYearStats();
   calculateDistanceStats();
-  calculateCarMakeStats();
+  // calculateCarMakeStats();
 
-  addTripsAndSpentByMonthChart();
+  // addTripsAndSpentByMonthChart();
 }
 
 function addTotalRidesStat() {
@@ -60,7 +59,7 @@ function calculateMoneySpent() {
   });
 
   // $ spent stats
-  $("#total-payment").text("~$" + totalAcrossAllCurrencies.toFixed(2));
+  $("#total-payment").text("$" + totalAcrossAllCurrencies.toFixed(2));
   let totalSpentText = "";
   let currencyKeys = getSortedKeysFromObject(totalSpent, true);
   for (const key of currencyKeys) {
@@ -69,11 +68,13 @@ function calculateMoneySpent() {
   }
   $("#total-spent").html(totalSpentText);
   $("#average-price").text("~$" + (totalAcrossAllCurrencies / completedTrips).toFixed(2));
-  addPriceChart();
+  // addPriceChart();
 }
 
 function calculateTripTypesStat() {
   let tripTypes = {};
+  let poolTypesCount = 0;
+  let otherTypesCount = 0;
 
   global.trips.forEach(t => {
     if (t.vehicleViewName) {
@@ -85,8 +86,18 @@ function calculateTripTypesStat() {
         tripTypes[name] = 0;
       }
       tripTypes[name]++;
+
+      if(name == 'Pool' || name == 'Express pool') {
+        poolTypesCount++;
+      } else {
+        otherTypesCount++;
+      }
     }
   });
+
+  console.log("pool types, non pool-types", poolTypesCount, otherTypesCount);
+  const percentPoolTypes = Math.round(100 * (poolTypesCount / (poolTypesCount + otherTypesCount)));
+  $("#pool-percent").html(`${percentPoolTypes}%`);
 
   let rideTypesText = constructTextSpan(tripTypes, true);
   $("#rides-by-type").html(rideTypesText);
@@ -256,6 +267,8 @@ function calculateMonthAndYearStats() {
       months[month] = 0;
     }
     months[month]++;
+
+    // In here you can calculate and set the field for year when started riding
   });
 
   let yearKeys = Object.keys(years);
@@ -309,7 +322,6 @@ function calculateDistanceStats() {
   let distances = {};
 
   global.trips.forEach(t => {
-
     if (t.receipt) {
       let receipt = t.receipt;
       if (!distances.hasOwnProperty(receipt.distance_label)) {
@@ -318,6 +330,31 @@ function calculateDistanceStats() {
       distances[receipt.distance_label] += parseFloat(receipt.distance);
     }
   });
+  console.log("distances", distances);
+  let totalMiles = 0;
+  if(distances.miles) {
+    totalMiles += distances.miles;
+  }
+  if(distances.kilometers) {
+    totalMiles += (distances.kilometers * 0.62);
+  }
+  totalMiles = Math.round(totalMiles * 100) / 100;
+  console.log("actual total distance in miles", totalMiles);
+  const milesText = `<span class="stat"> ${totalMiles} miles</span><br>`;
+  $("#total-miles").html(milesText);
+
+  const carbonTonnes = Math.round(totalMiles * 0.000445334 * 100) / 100;
+  const carbonText = `<span class="stat"> ${carbonTonnes} tonnes</span><br>`;
+  $("#total-carbon").html(carbonText);
+
+  const carbonTonnesRounded = Math.ceil(carbonTonnes);
+  const costToOffset = Math.round(100 * carbonTonnesRounded * 16.5) / 100;
+
+  const linkToNori = `https://nori.com/remove-carbon/checkout?tonnes=${carbonTonnesRounded}.00`;
+  const linkHTML = `<a href=${linkToNori}> Offset now for $${costToOffset}</span><br>`;
+  $("#link-to-nori").html(linkHTML);
+
+  console.log("THINGS", linkToNori, costToOffset);
 
   let distanceKeys = getSortedKeysFromObject(distances, true);
   if (distanceKeys.length) {
@@ -327,7 +364,6 @@ function calculateDistanceStats() {
       distanceText += `<span class="subheading">${uppercaseFirst(key)}</span><span class="stat"> ${Math.round(distances[key])}</span><br>`;
     }
     $("#distances").html(distanceText);
-    addDistanceChart();
   }
 }
 
@@ -349,388 +385,4 @@ function calculateCarMakeStats() {
     let carText = constructTextSpan(carMakes, true, 3);
     $("#rides-by-car").html(carText);
   }
-}
-
-function addTripsAndSpentByMonthChart() {
-  const numTripsByMonthCtx = document.getElementById("rides-chart").getContext('2d');
-  const amountSpentByMonthCtx = document.getElementById("monthly-spend-chart").getContext('2d');
-  /*
-   data is an object that stores unix timestamps, by month, along with stats for that month
-   This includes the number of trips and the amount spent.
-
-   example:
-
-   data = {
-   1559101412066: {
-   numTrips: 0,
-   amountSpent: 0
-   }
-   }
-   */
-  let data = {};
-  global.trips.forEach(t => {
-    let requestTime = new Date(t.requestTime);
-    // Get date that is first of the month to provide lower bound
-    let lowerBound = new Date(requestTime.getFullYear(), requestTime.getMonth(), 1);
-    if (!data.hasOwnProperty(lowerBound.getTime())) {
-      data[lowerBound.getTime()] = {
-        numTrips: 0,
-        amountSpent: 0
-      };
-    }
-    if (t.clientFare) {
-      const amountSpentOnTrip = getCurrencyConversionIfExists(t.currencyCode, t.clientFare);
-      data[lowerBound.getTime()].amountSpent += amountSpentOnTrip;
-    }
-    data[lowerBound.getTime()].numTrips++;
-  });
-  let times = Object.keys(data);
-  // times stores Unix time stamp kv pairs
-  times.sort((a, b) => a - b);
-  // Fill in 0s for months with no rides
-  if (times.length) {
-    // Month of first uber ride ever
-    let monthToCheck = new Date(parseInt(times[0]));
-    let now = new Date();
-    while (monthToCheck < now) {
-      if (!data.hasOwnProperty((monthToCheck.getTime()))) {
-        data[monthToCheck.getTime()] = {
-          numTrips: 0,
-          amountSpent: 0
-        };
-      }
-      monthToCheck = monthToCheck.next().month();
-    }
-  }
-  // Get the keys again, as we might've just added some 0 months
-  times = Object.keys(data);
-  times.sort((a, b) => a - b);
-  let finalCountsTripCounts = [];
-  let finalCountsSpendCounts = [];
-  for (const key of times) {
-    finalCountsTripCounts.push({
-      x: new Date(parseInt(key)),
-      y: data[key].numTrips
-    });
-    finalCountsSpendCounts.push({
-      x: new Date(parseInt(key)),
-      y: data[key].amountSpent
-    });
-  }
-
-  const chart = new Chart(numTripsByMonthCtx, {
-    type: 'line',
-    data: {
-      datasets: [{
-        label: "Rides Taken",
-        data: finalCountsTripCounts,
-        fill: false,
-        borderColor: 'black'
-
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      title: {
-        display: true,
-        text: "Rides by Month"
-      },
-      scales: {
-        xAxes: [{
-          type: "time",
-          time: {
-            unit: 'month'
-          },
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Date'
-          }
-        }],
-        yAxes: [{
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'value'
-          }
-        }]
-      },
-      tooltips: {
-        enabled: true,
-        mode: 'single',
-        callbacks: {
-          title: function (tooltipItem, data) {
-            // xlabel is always in the format Month 1, Year
-            // remove the '1, ' so that it's just "Month Year"
-            return tooltipItem[0].xLabel.replace("1, ", "");
-          }
-        }
-      }
-    }
-  });
-  $("#rides-chart").css('background-color', 'white');
-  chart.render();
-
-  const monthlySpend = new Chart(amountSpentByMonthCtx, {
-    type: 'line',
-    data: {
-      datasets: [{
-        label: "Amount Spent",
-        data: finalCountsSpendCounts,
-        fill: false,
-        borderColor: 'black'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      title: {
-        display: true,
-        text: "Amount Spent by Month"
-      },
-      scales: {
-        xAxes: [{
-          type: "time",
-          time: {
-            unit: 'month'
-          },
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Date'
-          }
-        }],
-        yAxes: [{
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'value'
-          }
-        }]
-      },
-      tooltips: {
-        enabled: true,
-        mode: 'single',
-        callbacks: {
-          title: function (tooltipItem, data) {
-            return tooltipItem[0].xLabel.replace("1, ", "");
-          },
-          label: function (tooltipItem, data) {
-            var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-            if (label) {
-              label += ': ';
-            }
-            label += Math.round(tooltipItem.yLabel * 100) / 100;
-            return label;
-          }
-        }
-      }
-    }
-  });
-  $("#monthly-spend-chart").css('background-color', 'white');
-  monthlySpend.render();
-
-}
-
-function addDistanceChart() {
-  const ctx = document.getElementById("distance-chart").getContext('2d');
-  let data = {};
-  global.trips.forEach(t => {
-    if (t && t.receipt) {
-      let requestTime = new Date(t.requestTime);
-      if (!data.hasOwnProperty(requestTime.getTime())) {
-        let distance = parseFloat(t.receipt.distance);
-        if (t.receipt.distance_label_short === "km") {
-          distance *= 0.62137119; // convert km to miles
-        }
-        data[requestTime.getTime()] = distance;
-      }
-    }
-  });
-  const times = Object.keys(data);
-  times.sort((a, b) => a - b);
-  let finalCounts = [];
-  let distanceTraveled = 0;
-  for (const key of times) {
-    distanceTraveled += data[key];
-    finalCounts.push({
-      x: new Date(parseInt(key)),
-      y: distanceTraveled
-    });
-  }
-  const chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      datasets: [{
-        label: "Total Traveled",
-        data: finalCounts,
-        fill: true,
-        borderColor: 'black'
-
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      title: {
-        display: true,
-        text: "Total Distance Traveled (miles)"
-      },
-      scales: {
-        xAxes: [{
-          type: "time",
-          time: {
-            unit: 'month'
-          },
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Date'
-          }
-        }],
-        yAxes: [{
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'value'
-          }
-        }]
-      }
-    }
-  });
-  $("#distance-chart").css('background-color', 'white');
-  chart.render();
-
-}
-
-function addPriceChart() {
-  const ctx = document.getElementById("price-chart").getContext('2d');
-  let data = {};
-  global.trips.forEach(t => {
-    if (t && t.clientFare) {
-      let requestTime = new Date(t.requestTime);
-      if (!data.hasOwnProperty(requestTime.getTime())) {
-        data[requestTime.getTime()] = getCurrencyConversionIfExists(t.currencyCode, parseFloat(t.clientFare));
-      }
-    }
-  });
-  const times = Object.keys(data);
-  times.sort((a, b) => a - b);
-  let finalCounts = [];
-  let totalSpent = 0;
-  for (const key of times) {
-    totalSpent += data[key];
-    finalCounts.push({
-      x: new Date(parseInt(key)),
-      y: totalSpent
-    });
-  }
-  const chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      datasets: [{
-        label: "Total Spent (Aggregate, no currency conversion)",
-        data: finalCounts,
-        fill: true,
-        borderColor: 'black'
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      title: {
-        display: true,
-        text: "Total Spent"
-      },
-      scales: {
-        xAxes: [{
-          type: "time",
-          time: {
-            unit: 'month'
-          },
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Date'
-          }
-        }],
-        yAxes: [{
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'value'
-          }
-        }]
-      }
-    }
-  });
-  $("#price-chart").css('background-color', 'white');
-  chart.render();
-
-}
-
-function registerClickHandlers() {
-  $("#export").click(async e => {
-    let trips = [...global.trips.values()];
-    const {value} = await Swal.fire({
-      title: 'CSV or JSON',
-      input: 'radio',
-      inputOptions: {
-        csv: "CSV",
-        json: "JSON"
-      }
-    });
-    if (value) {
-      if (value === 'csv') {
-        let csv = convertArrayOfObjectsToCSV({
-          data: trips
-        });
-        if (csv == null) {
-          return;
-        }
-        let hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = 'trips.csv';
-        hiddenElement.click();
-        alert("Note: Fields that are JSON objects are base64 encoded");
-
-      } else if (value === "json") {
-        let json = JSON.stringify(trips);
-        let hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/json;charset=utf-8,' + encodeURI(json);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = 'trips.json';
-        hiddenElement.click();
-      }
-    }
-  });
-
-  $("#share").click(e => {
-    let minutes = $("#minutes").text();
-    if (minutes) {
-      minutes = minutes.trim();
-    }
-    let numUbers = global.trips.size;
-    let text = `I've taken ${numUbers} Ubers, and have spent ${minutes} minutes in Ubers! Check out your numbers using RideShareStats by @jonlucadecaro here: `;
-    window.open("https://twitter.com/share?url=https://chrome.google.com/webstore/detail/uber-trip-stats/kddlnbejbpknoedebeojobofnbdfhpnm&text=" + encodeURIComponent(text), '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
-    return false;
-  });
-
-  $("#export-image").click(e => {
-    $(".should-hide-in-image").hide();
-    let options = {backgroundColor: '#000'};
-    html2canvas($('.container')[0], options).then(function (canvas) {
-      console.log(canvas);
-      let a = document.createElement('a');
-      // toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
-      a.href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-      a.download = 'stats.png';
-      a.style.display = 'none';
-      a.click();
-      $(".should-hide-in-image").show();
-    });
-  });
 }

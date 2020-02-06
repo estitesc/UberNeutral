@@ -4,10 +4,6 @@ chrome.browserAction.onClicked.addListener(function (tab) {
     chrome.tabs.executeScript(null, {
       file: "RideShareStats.js"
     });
-  } else if (url.hostname.endsWith("ubereats.com")) {
-    chrome.tabs.executeScript(null, {
-      file: "EatsStats.js"
-    });
   } else {
     chrome.tabs.executeScript(null, {
       file: "js/libs/sweetalert2.all.min.js"

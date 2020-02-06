@@ -13,132 +13,57 @@
     <script src="../js/main.js"></script>
 </head>
 <body>
-<header>RideShare Stats</header>
+<header>UberNeutral</header>
 <div class="container">
-    <h1>Lifetime</h1>
+    <div class="subheader">
+        Offset carbon emissions for every Uber ride you've taken.
+    </div>
     <div class="lifetime">
         <div class="stats-view">
             <div class="individual-stat">
-                <span>Total Spent</span>
+                <span>Total miles traveled since <span class="stat" id="start-year"></span> &nbsp;&nbsp;&nbsp;</span>
+                <span class="stat" id="total-miles"></span>
+            </div>
+            <div class="individual-stat">
+                <span>Tonnes of CO2 to Offset &nbsp;&nbsp;&nbsp;</span>
+                <span class="stat" id="total-carbon"></span>
+            </div>
+            <div class="individual-stat">
+                <span>Total Spent &nbsp;&nbsp;&nbsp;</span>
                 <span class="stat" id="total-payment"></span>
-                <div id="total-spent"></div>
             </div>
             <div class="individual-stat">
-                <span>Average Price</span>
-                <span class="stat" id="average-price"></span>
-            </div>
-            <br class="spacer">
-            <div class="individual-stat">
-                <span>Total Time</span>
-                <div id="total-time"></div>
-            </div>
-            <div class="individual-stat">
-                <span>Shortest Time</span>
-                <span class="stat" id="shortest-ride"></span>
-            </div>
-            <div class="individual-stat">
-                <span>Longest Time</span>
-                <span class="stat" id="longest-ride"></span>
-            </div>
-            <br class="spacer">
-            <div class="individual-stat should-hide-in-image">
-                <span>Most Rides With Same Driver</span><br>
-                <div class="stat" id="same-driver"></div>
-            </div>
-        </div>
-        <div class="stats-view">
-            <div class="individual-stat">
-                <span>Total Rides</span>
+                <span>Total Rides &nbsp;&nbsp;&nbsp;</span>
                 <span class="stat" id="total-rides"></span>
-                <div>
-                    <span class="subheading">Completed Rides</span>
-                    <span class="stat" id="completed-rides"></span>
-                    <br class="spacer">
-                    <span class="subheading">User Canceled Rides</span>
-                    <span class="stat" id="canceled-rides"></span>
-                    <br class="spacer">
-                    <span class="subheading">Driver Canceled Rides</span>
-                    <span class="stat" id="driver-canceled-rides"></span>
-                    <br class="spacer">
-                    <span class="subheading">Surge Rides</span>
-                    <span class="stat" id="surge-rides"></span>
-                    <br class="spacer">
-                </div>
             </div>
-            <br class="spacer">
             <div class="individual-stat">
-                <span>Rides By Type</span>
-                <div id="rides-by-type"></div>
+                <span>% of rides that are UberPools &nbsp;&nbsp;&nbsp;</span>
+                <span class="stat" id="pool-percent"></span>
             </div>
-            <br class="spacer">
-            <div class="individual-stat">
-                <span># Payment Methods</span>
-                <span class="stat" id="num-payment"></span>
+            <div class="main-button-group">
+                <span id="link-to-nori"></span>
+                <a target="_blank" href="https://twitter.com/intent/tweet?text=I%20just%20personally%20offset%20my%20carbon%20emissions%20from%20the%20X%20Uber%20rides%20I%20took%20in%20the%20past%20X%20years%20using%20%23UberNeutral.%20I%20also%20found%20out%20how%20much%20l%27ve%20spent%20on%20Uber%20in%20the%20past%20decade%20%3Agrimacing%3A%20Find%20out%20your%20Uber%20history%21%20&original_referer=https://clicktotweet.com&related=tweetdripapp" class="alt-link">Share</a>
             </div>
-        </div>
-        <div class="stats-view">
-            <div class="individual-stat">
-                <span>Rides By Year</span>
-                <div id="rides-by-year"></div>
-            </div>
-            <br class="spacer">
-            <div class="individual-stat">
-                <span>Rides By Month</span><br>
-                <div id="rides-by-month"></div>
-            </div>
-        </div>
-        <div class="stats-view">
-            <div class="individual-stat">
-                <span>Rides By City</span>
-                <div id="rides-by-city"></div>
-            </div>
-            <br class="spacer">
-            <div class="individual-stat hidden">
-                <span>Distances</span>
-                <div id="distances"></div>
-            </div>
-        </div>
-        <div class="stats-view ">
-            <div class="individual-stat hidden">
-                <span>Most Popular Cars</span>
-                <div id="rides-by-car"></div>
-            </div>
-            <br class="spacer hidden">
-            <div class="individual-stat should-hide-in-image">
-                <span>Favorite Pickup Location</span><br>
-                <span class="stat" id="fave-pickup"></span>
-            </div>
-            <br class="spacer">
-            <div class="individual-stat should-hide-in-image">
-                <span>Favorite Dropoff Location</span><br>
-                <span class="stat" id="fave-dropoff"></span>
-            </div>
-        </div>
-        <div class="stats-view ">
-            <div class="individual-stat">
-                <span>This Year So Far</span>
-                <div id="monthly-prices"></div>
+            <div class="fine-print">
+                We’ve integrated with Nori to offset your Carbon Footprint. Read more about how they use blockchain to help reverse climate change. Feel free to use another service like Gold Standard if you would like a more traditional offsetting service.
             </div>
         </div>
     </div>
-    <div class="chart-container">
-        <canvas id="rides-chart" width="400" height="400"></canvas>
+    <div class="bottom-section">
+        <div class="subheader subheader-lower">
+            Want to help fight climate change?
+        </div>
+        <div class="content-lower">
+            We want to see a future where Nemo can just keep swimming in coral reefs and penguins can march on ice caps for decades to come. At this point, those visions are looking more like an actual Disney fairytale than our reality. <br /><br />
+            According to the IPCC (the United Nations body for assessing the science related to climate change) they found that the world needs to take urgent, transformative action to avert the worst impacts of climate change beyond 1.5°C (or 2.7° Fahrenheit for y'all non-metric converting American) degrees warming.<br /><br />
+            This is a big deal! And it can't happen overnight or with one wave of a magic wand (but like could we phone a friend and get Harry Potter to work on this too?). We need dramatic policy changes, large companies committing to to going carbon neutral (or negative! like Microsoft plans to), citizen voices demanding change, and new technology to remove carbon from the air.<br /><br />
+            While that might feel like an overwhelming pie to have a slice of, you can start small. Here's a few of our favorite resources to help reduce your carbon footprint as an individual AND start speaking up as a voice for change in your community.<br /><br />
+            Here's one tiny action that could help speak up and get Uber to commit to going carbon neutral (like Lyft already has. Yay!). This one tweet will not make the climate change pie look less gloomy, but it could be a delicious red chili flake.
+            Start small, but don't stop small people.
+        </div>
+        <div class="lower-button-group">
+            <a href="#" class="lower-link">Tweet at Uber to go carbon neutral</a>
+        </div>
     </div>
-    <div class="chart-container">
-        <canvas id="monthly-spend-chart" width="400" height="400"></canvas>
-    </div>
-    <div class="chart-container hidden">
-        <canvas id="distance-chart" width="400" height="400"></canvas>
-    </div>
-    <div class="chart-container hidden">
-        <canvas id="price-chart" width="400" height="400"></canvas>
-    </div>
-</div>
-<div class="buttons">
-    <div class="button" id="export">Export</div>
-    <div class="button" id="share">Share on Twitter</div>
-    <div class="button" id="export-image">Download Image</div>
-</div>
-<footer>&copy; 2019 JonLuca DeCaro - <a href="https://github.com/jonluca/Uber-Trip-Stats">View Source</a></footer>
 </body>
 </html>

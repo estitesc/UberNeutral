@@ -1,12 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "RideShare Trip Stats",
+  "name": "UberNeutral",
   "description": "Analyzes your rideshare profile to show statistics on your rides!",
   "version": "1.7.2",
   "permissions": [
     "*://uber.com/*",
     "*://*.uber.com/*",
-    "*://*.ubereats.com/*",
     "storage",
     "tabs",
     "activeTab"
@@ -24,7 +23,6 @@
       "matches": [
         "*://uber.com/*",
         "*://*.uber.com/*",
-        "https://*.ubereats.com/*",
         "https://riders.uber.com/*"
       ],
       "js": [

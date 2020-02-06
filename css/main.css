@@ -20,13 +20,10 @@ body {
   text-decoration: underline;
 }
 
-.eatsBody {
-  background-color: rgb(117, 180, 55);
-}
-
 header {
   font-size: 56px;
-  margin-left: 50px;
+  margin-left: 90px;
+  margin-top: 50px;
 }
 
 footer {
@@ -36,32 +33,96 @@ footer {
   margin-top: 20px;
 }
 
+.bottom-section {
+  background-color: #fff;
+  box-shadow: 0 50vh 0 50vh #fff;
+  color: #000;
+  width: 100%;
+}
+
 h1 {
   font-family: Medium, serif;
   margin-left: 50px;
 }
 
 a {
+  background-color: white;
+  color: black;
+  padding: 10px 30px;
+  text-align: center;
   text-decoration: none;
+  display: inline-block;
+  font-size: 22px;
+  margin-right: 20px;
+}
+
+.alt-link {
+  background-color: #000;
+  padding: 8px 90px;
+  border: 2px solid #fff;
   color: white;
 }
 
+.lower-link {
+  background-color: #000;
+  padding: 8px 30px;
+  border: 2px solid #fff;
+  color: white;
+}
+
+.fine-print {
+  font-size: 10px;
+  width: 500px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #a8a8a8;
+}
+
+.subheader {
+  margin-top: 20px;
+  width: 280px;
+  margin-left: 92px;
+  font-family: Medium, serif;
+  font-size: 16px;
+}
+
+.subheader-lower {
+  color: #000;
+  padding-top: 30px;
+  font-size: 22px;
+  width: 400px;
+}
+
+.content-lower {
+  margin-top: 20px;
+  color: #000;
+  margin-left: 92px;
+  font-size: 14px;
+  width: 750px;
+}
+
+.main-button-group {
+  margin-top: 20px;
+}
+
+.lower-button-group {
+  margin-top: 20px;
+  margin-left: 90px;
+  margin-bottom: 40px;
+}
+
 .lifetime {
-  margin: 10px 0px 10px 50px;
+  margin: 10px 0px 10px 90px;
   display: flex;
 }
 
 .individual-stat {
-  font-size: 18px;
-  padding-top: 5px;
+  font-size: 22px;
+  padding-top: 20px;
 }
 
 .stat {
   color: #a8a8a8;
-}
-
-.stat-eats {
-  color: #092a00;
 }
 
 .stats-view {

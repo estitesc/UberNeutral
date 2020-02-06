@@ -18,7 +18,7 @@ $(_ => {
     startUberRidesAnalysis();
 
   } else {
-    if (confirm("You must be on https://riders.uber.com/trips or ubereats.com to use this tool! Redirecting now.")) {
+    if (confirm("You must be on https://riders.uber.com/trips to use this tool! Redirecting now.")) {
       window.location.href = "https://riders.uber.com/trips";
     }
   }
