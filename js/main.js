@@ -23,7 +23,7 @@ function startStatistics() {
   // calculateDriverStats();
   // calculateCityStats();
   // calculatePickupAndDropoffStats();
-  // calculateMonthAndYearStats();
+  calculateMonthAndYearStats();
   calculateDistanceStats();
   // calculateCarMakeStats();
 
@@ -245,6 +245,7 @@ function calculateMonthAndYearStats() {
   let months = {};
   const today = new Date();
   let totalSpentThisYear = {};
+  let earliestYear = 2020;
   global.trips.forEach(t => {
     let date = new Date(t.requestTime);
     let year = date.getFullYear();
@@ -268,8 +269,14 @@ function calculateMonthAndYearStats() {
     }
     months[month]++;
 
+    if(year < earliestYear) {
+      earliestYear = year;
+    }
+
     // In here you can calculate and set the field for year when started riding
   });
+  console.log("earliest year", earliestYear);
+  $("#start-year").html(earliestYear);
 
   let yearKeys = Object.keys(years);
   yearKeys.sort((a, b) => {
@@ -351,7 +358,7 @@ function calculateDistanceStats() {
   const costToOffset = Math.round(100 * carbonTonnesRounded * 16.5) / 100;
 
   const linkToNori = `https://nori.com/remove-carbon/checkout?tonnes=${carbonTonnesRounded}.00`;
-  const linkHTML = `<a href=${linkToNori}> Offset now for $${costToOffset}</span><br>`;
+  const linkHTML = `<a class="button-link" href=${linkToNori}> Offset now for $${costToOffset}</span><br>`;
   $("#link-to-nori").html(linkHTML);
 
   console.log("THINGS", linkToNori, costToOffset);

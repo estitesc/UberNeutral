@@ -46,6 +46,14 @@ h1 {
 }
 
 a {
+  color: #fff;
+}
+
+.dark {
+  color: #000;
+}
+
+.button-link {
   background-color: white;
   color: black;
   padding: 10px 30px;
@@ -55,6 +63,7 @@ a {
   font-size: 22px;
   margin-right: 20px;
 }
+
 
 .alt-link {
   background-color: #000;
