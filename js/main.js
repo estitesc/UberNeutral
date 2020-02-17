@@ -278,10 +278,10 @@ function calculateMonthAndYearStats() {
   console.log("earliest year", earliestYear);
   $("#start-year").html(earliestYear);
 
-  const tweetLink = `<a target="_blank" class="button-link alt-link" href="https://twitter.com/intent/tweet?text=I%20just%20personally%20offset%20my%20carbon%20emissions%20from%20the%20${global.trips.size}%20Uber%20rides%20I%27ve%20taken%20since%20${earliestYear}%20using%20%23UberNeutral.%20I%20also%20found%20out%20how%20much%20l%27ve%20spent%20on%20Uber%20in%20the%20past%20decade!%20Find%20out%20your%20Uber%20history%3A%20http%3A%2F%2Fuberneutral.com">Share</a>`
+  const tweetLink = `<a target="_blank" class="button-link alt-link" href="https://twitter.com/intent/tweet?text=I%20just%20personally%20offset%20my%20carbon%20emissions%20from%20the%20${global.trips.size}%20Uber%20rides%20I%27ve%20taken%20since%20${earliestYear}%20using%20%23RideNeutral.%20I%20also%20found%20out%20how%20much%20l%27ve%20spent%20on%20Uber%20in%20the%20past%20decade!%20Find%20out%20your%20Uber%20history%3A%20http%3A%2F%2Fuberneutral.com">Share</a>`
   $("#link-to-share").html(tweetLink);
 
-  const uberTweetLink = `<a target="_blank" href="https://twitter.com/intent/tweet?text=%40Uber%20I%20just%20personally%20offset%20my%20carbon%20emissions%20by%20from%20the%20${global.trips.size}%20Uber%20rides%20I%20took%20since%20${earliestYear}%20using%20%23UberNeutral.%20When%20are%20you%20going%20carbon%20neutral%20like%20%40Lyft%3F" class="button-link lower-link">Tweet at Uber to go carbon neutral</a>`
+  const uberTweetLink = `<a target="_blank" href="https://twitter.com/intent/tweet?text=%40Uber%20I%20just%20personally%20offset%20my%20carbon%20emissions%20by%20from%20the%20${global.trips.size}%20Uber%20rides%20I%20took%20since%20${earliestYear}%20using%20%23RideNeutral.%20When%20are%20you%20going%20carbon%20neutral%20like%20%40Lyft%3F" class="button-link lower-link">Tweet at Uber to go carbon neutral</a>`
   $("#link-to-tweet-uber").html(uberTweetLink);
 
   let yearKeys = Object.keys(years);
