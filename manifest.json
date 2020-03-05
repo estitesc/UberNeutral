@@ -2,13 +2,10 @@
   "manifest_version": 2,
   "name": "RideNeutral",
   "description": "Offset carbon emissions for every Uber ride you've taken.",
-  "version": "1.7.2",
+  "version": "1.0.0",
   "permissions": [
     "*://uber.com/*",
-    "*://*.uber.com/*",
-    "storage",
-    "tabs",
-    "activeTab"
+    "*://*.uber.com/*"
   ],
   "background": {
     "persistent": true,
