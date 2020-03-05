@@ -114,7 +114,10 @@ function requestDataFromUber(csrf, limit, offset, isFirstRun) {
           }
         });
       }
-      checkIfCompleteOriginalAPI();
+      // We are no longer going to ask about individual trip stats, they should just be pulled by default.
+      --requestsActive;
+      requestAllTripInfo();
+      // checkIfCompleteOriginalAPI();
     },
     error: function (xhr, ajaxOptions, thrownError) {
       if (isFirstRun) {
@@ -122,41 +125,43 @@ function requestDataFromUber(csrf, limit, offset, isFirstRun) {
         alert("Please sign in and click UberStats icon again!");
         return;
       }
-      checkIfCompleteOriginalAPI();
+      // checkIfCompleteOriginalAPI();
+      --requestsActive;
+      requestAllTripInfo();
     }
   });
 }
 
-function checkIfCompleteOriginalAPI() {
-  --requestsActive;
-  if (requestsActive === 0) {
-    $("#overlay").hide();
-    window.Swal({
-      title: 'Request individual trip data?',
-      html: "Takes significantly longer, and might trigger email receipts due to Uber's cache!<br><br>Clicking No will still show most stats.",
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No'
-    }).then((result) => {
-      if (result.value) {
-        requestAllTripInfo();
-      } else {
-        // Once all requests have completed, trigger a new tab and send the data
-        let serialized = {};
-        serialized.payment = [...global.payment];
-        serialized.drivers = [...global.drivers];
-        serialized.trips = [...global.trips];
-        serialized.cities = [...global.cities];
-        chrome.runtime.sendMessage({global: serialized});
-        $("#overlay").hide();
-      }
-    });
+// function checkIfCompleteOriginalAPI() {
+//   --requestsActive;
+//   if (requestsActive === 0) {
+//     $("#overlay").hide();
+//     window.Swal({
+//       title: 'Request individual trip data?',
+//       html: "Takes significantly longer, and might trigger email receipts due to Uber's cache!<br><br>Clicking No will still show most stats.",
+//       type: 'question',
+//       showCancelButton: true,
+//       confirmButtonColor: '#3085d6',
+//       cancelButtonColor: '#d33',
+//       confirmButtonText: 'Yes!',
+//       cancelButtonText: 'No'
+//     }).then((result) => {
+//       if (result.value) {
+//         requestAllTripInfo();
+//       } else {
+//         // Once all requests have completed, trigger a new tab and send the data
+//         let serialized = {};
+//         serialized.payment = [...global.payment];
+//         serialized.drivers = [...global.drivers];
+//         serialized.trips = [...global.trips];
+//         serialized.cities = [...global.cities];
+//         chrome.runtime.sendMessage({global: serialized});
+//         $("#overlay").hide();
+//       }
+//     });
 
-  }
-}
+//   }
+// }
 
 function requestAllTripInfo() {
   $("#overlay").show();
