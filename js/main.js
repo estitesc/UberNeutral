@@ -361,11 +361,16 @@ function calculateDistanceStats() {
   $("#total-carbon").html(carbonText);
 
   const carbonTonnesRounded = Math.ceil(carbonTonnes);
-  const costToOffset = Math.round(100 * carbonTonnesRounded * 16.5) / 100;
+  let costToOffset = 15;
+  let linkToOffset = `https://tradewater.us/offsetnow/#go`;
 
-  const linkToNori = `https://nori.com/remove-carbon/checkout?tonnes=${carbonTonnesRounded}.00`;
-  const linkHTML = `<a class="button-link" href=${linkToNori}> Offset now for $${costToOffset}</span><br>`;
-  $("#link-to-nori").html(linkHTML);
+  if (carbonTonnesRounded > 1) {
+    linkToOffset = `https://nori.com/remove-carbon/checkout?tonnes=${carbonTonnesRounded}.00`;
+    costToOffset = Math.round(100 * carbonTonnesRounded * 16.5) / 100;
+  }
+
+  const linkHTML = `<a class="button-link" href=${linkToOffset}> Offset now for $${costToOffset}</span><br>`;
+  $("#link-to-offset").html(linkHTML);
 
   console.log("THINGS", linkToNori, costToOffset);
 
